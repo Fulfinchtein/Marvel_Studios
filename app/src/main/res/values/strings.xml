@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MARVELSTUDIOS</string>
+    <string name="hero_name_deadpool">Deadpool</string>
+    <string name="hero_description_deadpool">Please don’t make the super suit green...or animated!</string>
+    <string name="hero_name_iron_man">Iron Man</string>
+    <string name="hero_description_iron_man">I AM IRON MAN</string>
+    <string name="hero_name_spider_man">Spider Man</string>
+    <string name="hero_description_spider_man">In iron suit</string>
+
+</resources>
