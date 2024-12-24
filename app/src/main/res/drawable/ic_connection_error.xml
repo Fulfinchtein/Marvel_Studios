@@ -7,7 +7,6 @@
     <string name="hero_name_spider_man">Spider Man</string>
     <string name="hero_description_spider_man">In iron suit</string>
 
-
     <string name="loading_failed">Failed to load</string>
     <string name="loading">Loading</string>
 </resources>

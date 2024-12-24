@@ -9,17 +9,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.marvelstudios.ui.theme.White
 
 @Composable
 fun CardMenu(
     name: String,
-    heroImageUrl: String,
+    imageUrl: String,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
@@ -28,11 +28,13 @@ fun CardMenu(
             .clickable(onClick = onClick)
             .shadow(10.dp, shape = MaterialTheme.shapes.medium)
     ) {
-        Box {
+        Box (modifier = Modifier.width(350.dp)) {
             AsyncImage(
-                model = heroImageUrl,
+                model = imageUrl,
                 contentDescription = null,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .width(350.dp)
+                    .height(600.dp),
                 contentScale = ContentScale.Crop
             )
 
