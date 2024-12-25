@@ -30,4 +30,4 @@ fun MarvelApp(characterViewModel: CharacterViewModel) {
         navController = navController,
         characterViewModel = characterViewModel
     )
-} //---
+}
