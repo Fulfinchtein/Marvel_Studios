@@ -1,7 +1,10 @@
 package com.example.marvelstudios.presentation.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,7 +31,7 @@ fun CardMenu(
             .clickable(onClick = onClick)
             .shadow(10.dp, shape = MaterialTheme.shapes.medium)
     ) {
-        Box (modifier = Modifier.width(350.dp)) {
+        Box(modifier = Modifier.width(350.dp)) {
             AsyncImage(
                 model = imageUrl,
                 contentDescription = null,

@@ -1,105 +1,93 @@
 package com.example.marvelstudios.presentation
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.marvelstudios.R
-import com.example.marvelstudios.api.CharacterViewModel
-import com.example.marvelstudios.presentation.components.LoadingScreen
 
 @Composable
 fun CardInfo(
-    navController: NavController,
-    characterViewModel: CharacterViewModel,
-    characterId: Int,
-    onClick: () -> Unit
+    url: String,
+    name: String,
+    description: String,
+    onClose: () -> Unit
 ) {
-    val characterDetails by characterViewModel.selectedCharacter.collectAsState()
-    val isLoading by characterViewModel.isLoading.collectAsState()
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        AsyncImage(
+            model = url,
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
 
-    LaunchedEffect(characterId) {
-        characterViewModel.getCharacterDetails(characterId)
-    }
-
-    when {
-        isLoading -> {
-            LoadingScreen()
+        IconButton(
+            onClick = { onClose() },
+            modifier = Modifier
+                .padding(16.dp)
+                .align(Alignment.TopStart)
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Back",
+                tint = Color.White
+            )
         }
-        characterDetails != null -> {
-            val character = characterDetails!!
-            Box {
-                AsyncImage(
-                    model = "${character.thumbnail.path}.${character.thumbnail.extension}".replace(
-                        "http://",
-                        "https://"
-                    ),
-                    contentDescription = "Character image",
-                    modifier = Modifier.fillMaxWidth(),
-                    contentScale = ContentScale.Crop,
-                    onError = {
-                        Log.e("CardInfo", "Error loading image: ${it.result.throwable.message}")
-                    }
+
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(16.dp)
+        ) {
+            Text(
+                text = name,
+                fontWeight = FontWeight.W900,
+                fontSize = 45.sp,
+                color = Color.White,
+                modifier = Modifier
+                    .padding(bottom = 15.dp),
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = Color.Gray,
+                        offset = Offset(4f, 4f),
+                        blurRadius = 16f
+                    )
                 )
+            )
 
-                Column {
-                    IconButton(
-                        onClick = onClick,
-                        modifier = Modifier.padding(20.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_arrow_left),
-                            contentDescription = "Back",
-                            tint = White,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Text(
-                        text = character.name,
-                        color = White,
-                        style = MaterialTheme.typography.headlineLarge,
-                        fontSize = 39.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .align(Alignment.Start)
-                            .padding(start = 20.dp, bottom = 50.dp)
+            Text(
+                text = description,
+                fontWeight = FontWeight.W700,
+                fontSize = 28.sp,
+                color = Color.White,
+                lineHeight = 30.sp,
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis,
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = Color.Black,
+                        offset = Offset(4f, 4f),
+                        blurRadius = 16f
                     )
-
-                    Text(
-                        text = character.description ?: "No description available",
-                        color = White,
-                        style = MaterialTheme.typography.headlineLarge,
-                        fontSize = 27.sp,
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 3,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier
-                            .align(Alignment.Start)
-                            .padding(start = 20.dp, bottom = 20.dp)
-                    )
-                }
-
-            }
+                )
+            )
         }
     }
 }

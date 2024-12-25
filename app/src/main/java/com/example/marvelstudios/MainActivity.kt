@@ -4,30 +4,41 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
-import com.example.marvelstudios.api.CharacterViewModel
+import com.example.marvelstudios.api.RetrofitInstance
+import com.example.marvelstudios.data.MarvelDatabase
+import com.example.marvelstudios.data.CharacterRepository
+
 
 class MainActivity : ComponentActivity() {
-
-    private lateinit var characterViewModel: CharacterViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        characterViewModel = ViewModelProvider(this)[CharacterViewModel::class.java]
+        val marvelDatabase = MarvelDatabase.getInstance(this)
+        val characterDao = marvelDatabase.characterDao()
+
+        val characterRepository = CharacterRepository(
+            apiService = RetrofitInstance.apiService,
+            characterDao = characterDao
+        )
 
         setContent {
-            MarvelApp(characterViewModel)
+            MarvelApp(
+                characterRepository = characterRepository
+            )
         }
     }
 }
 
 @Composable
-fun MarvelApp(characterViewModel: CharacterViewModel) {
+fun MarvelApp(
+    characterRepository: CharacterRepository,
+) {
     val navController = rememberNavController()
     Navigation(
         navController = navController,
-        characterViewModel = characterViewModel
+        characterRepository = characterRepository
     )
 }
+
