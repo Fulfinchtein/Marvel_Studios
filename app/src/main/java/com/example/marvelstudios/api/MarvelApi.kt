@@ -6,7 +6,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MarvelApi {
-
     @GET("characters/{characterId}")
     suspend fun getCharacter(
         @Path("characterId") characterId: Int,
@@ -14,12 +13,10 @@ interface MarvelApi {
         @Query("hash") hash: String,
         @Query("ts") ts: Long
     ): Response<MarvelResponse>
-
     @GET("characters")
     suspend fun getCharacters(
         @Query("apikey") apiKey: String,
         @Query("hash") hash: String,
         @Query("ts") ts: Long
     ): Response<MarvelResponse>
-
 }

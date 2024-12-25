@@ -1,41 +1,44 @@
 package com.example.marvelstudios
 
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.compose.*
-import androidx.navigation.navArgument
-import com.example.marvelstudios.api.CharacterViewModel
-import com.example.marvelstudios.presentation.CardInfo
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.example.marvelstudios.data.CharacterRepository
+import com.example.marvelstudios.checkNetworkAvailability
 import com.example.marvelstudios.presentation.MainMenu
+import com.example.marvelstudios.presentation.CardInfo
 
 @Composable
 fun Navigation(
     navController: NavHostController,
-    characterViewModel: CharacterViewModel
+    characterRepository: CharacterRepository,
 ) {
+    val context = LocalContext.current
+    val isNetworkAvailable = remember { context.checkNetworkAvailability() }
+
     NavHost(navController = navController, startDestination = "home") {
         composable("home") {
-            MainMenu(navController, characterViewModel)
-        }
-
-        composable(
-            route = "heroDetail/{characterId}/{imageUrl}/{characterName}/{characterDescription}",
-            arguments = listOf(
-                navArgument("characterId") { type = NavType.IntType },
-                navArgument("imageUrl") { type = NavType.StringType },
-                navArgument("characterName") { type = NavType.StringType },
-                navArgument("characterDescription") { type = NavType.StringType }
+            MainMenu(
+                navController = navController,
+                characterRepository = characterRepository,
+                isNetworkAvailable = isNetworkAvailable
             )
-        ) { backStackEntry ->
-            val characterId = backStackEntry.arguments?.getInt("characterId") ?: -1
+        }
+        composable("heroDetail/{id}/{url}/{name}/{description}") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id") ?: "Неизвестный ID"
+            val url = backStackEntry.arguments?.getString("url") ?: ""
+            val name = backStackEntry.arguments?.getString("name") ?: "Неизвестно"
+            val description = backStackEntry.arguments?.getString("description") ?: "Описание отсутствует"
 
             CardInfo(
-                navController = navController,
-                characterViewModel = characterViewModel,
-                characterId = characterId,
-                onClick = { navController.popBackStack() }
+                url = url,
+                name = name,
+                description = description,
+                onClose = { navController.popBackStack() }
             )
         }
     }
